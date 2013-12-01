@@ -19,12 +19,10 @@ public class Clouds {
 	Vector2 position = new Vector2();
 	Rectangle bounds = new Rectangle();
 	
-	public Clouds(Vector2 position) {
+	public Clouds() {
 		clouds = new ArrayList<Rectangle>();
-		texture = new Texture(Gdx.files.internal("data/cloud.png"));
-		this.position = position;
-		this.bounds.setX(position.x);
-		this.bounds.setY(position.y);
+		this.bounds.x = 0;
+		this.bounds.y = 0;
 		this.bounds.width = SIZE_WIDTH;
 		this.bounds.height = SIZE_HEIGHT;
 	}

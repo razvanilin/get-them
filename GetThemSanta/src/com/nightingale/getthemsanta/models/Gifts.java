@@ -16,12 +16,8 @@ public class Gifts {
 	Vector2 position = new Vector2();
 	Rectangle bounds = new Rectangle();
 	
-	public Gifts(Vector2 pos){
+	public Gifts(){
 		gifts = new ArrayList<Rectangle>();
-		texture = new Texture(Gdx.files.internal("data/gift.png"));
-		this.position = pos;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
 		this.bounds.width = SIZE;
 		this.bounds.height = SIZE;
 	}

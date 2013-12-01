@@ -1,13 +1,12 @@
 package com.nightingale.getthemsanta.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.nightingale.getthemsanta.controllers.SantaController;
 import com.nightingale.getthemsanta.models.World;
 import com.nightingale.getthemsanta.view.WorldRenderer;
@@ -19,12 +18,18 @@ public class GameScreen implements Screen, InputProcessor{
 	private SantaController controller;
 	private SpriteBatch spriteBatch;
 	
+	private Game game;
+	
 	private int width, height;
 	private boolean passed=false;
+	
+	public GameScreen(Game game){
+		this.game=game;
+	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 1, 0, 1);
+		//Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		renderer.render();
@@ -41,8 +46,8 @@ public class GameScreen implements Screen, InputProcessor{
 	@Override
 	public void show() {
 		world = new World();
-		renderer = new WorldRenderer(world);
-		controller = new SantaController(world);
+		renderer = new WorldRenderer(world, game);
+		controller = new SantaController(world, game);
 		Gdx.input.setInputProcessor(this);
 
 	}

@@ -2,9 +2,9 @@ package com.nightingale.getthemsanta.controllers;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Peripheral;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.nightingale.getthemsanta.models.Santa;
 import com.nightingale.getthemsanta.models.Santa.State;
@@ -23,6 +23,8 @@ public class SantaController {
 	private Santa santa;
 	private WorldRenderer renderer;
 	
+	private Game game;
+	
 	static HashMap<Keys, Boolean> keys = new HashMap<SantaController.Keys, Boolean>();
 	static{
 		keys.put(Keys.LEFT, false);
@@ -32,10 +34,11 @@ public class SantaController {
 	private float ppuX;
 	private float ppuY;
 	
-	public SantaController(World world){
+	public SantaController(World world, Game game){
+		this.game = game;
 		this.world = world;
 		this.santa = world.getSanta();
-		renderer = new WorldRenderer(world);
+		renderer = new WorldRenderer(world, game);
 	}
 	
 	public void leftPressed(){
@@ -53,11 +56,11 @@ public class SantaController {
 	
 	public void update(float delta){
 		processInput();
-		
+		/*
 		santa.getAcceleration().y = GRAVITY;
 		santa.getAcceleration().mul(delta);
 		santa.getVelocity().add(santa.getAcceleration().x, santa.getAcceleration().y);
-		
+		*/
 		santa.update(delta);
 	}
 
@@ -79,7 +82,7 @@ public class SantaController {
 		if (keys.get(Keys.LEFT)) {
 			santa.setState(State.LEFT);
 			if (santa.getPosition().x >= santa.getSize()*ppuX){
-				santa.getAcceleration().x = -20f;
+				//santa.getAcceleration().x = -20f;
 				santa.setPosition(new Vector2(santa.getPosition().x - 20, santa.getPosition().y));
 			//System.out.println("moved left");
 			}
@@ -88,7 +91,7 @@ public class SantaController {
 		if (keys.get(Keys.RIGHT)) {
 			santa.setState(State.RIGHT);
 			if (santa.getPosition().x <= Gdx.graphics.getWidth()-(santa.getSize()*ppuX)){
-				santa.getAcceleration().x = 20f;
+				//santa.getAcceleration().x = 20f;
 				santa.setPosition(new Vector2(santa.getPosition().x + 20, santa.getPosition().y));
 				//System.out.println("moved right");
 			}
