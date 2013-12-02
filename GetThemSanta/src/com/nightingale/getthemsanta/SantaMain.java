@@ -2,13 +2,14 @@ package com.nightingale.getthemsanta;
 
 import com.badlogic.gdx.Game;
 import com.nightingale.getthemsanta.screens.GameScreen;
+import com.nightingale.getthemsanta.screens.MenuScreen;
 
 public class SantaMain extends Game {
-	private GameScreen gameScreen;
+	private MenuScreen menuScreen;
 	
 	@Override
 	public void create() {	
-		gameScreen = new GameScreen(this);
-		setScreen(gameScreen);
+		menuScreen = new MenuScreen(this);
+		setScreen(menuScreen);
 	}
 }

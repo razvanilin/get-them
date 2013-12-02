@@ -95,12 +95,12 @@ public class EndingScreen implements Screen, InputProcessor{
 	@Override
 	public void dispose() {
 		spriteBatch.dispose();
-		
+		white.dispose();
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		 	game.setScreen(new GameScreen(game));
+		 	game.setScreen(new MenuScreen(game));
 		return false;
 	}
 
@@ -118,7 +118,7 @@ public class EndingScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-			game.setScreen(new GameScreen(game));
+			game.setScreen(new MenuScreen(game));
 		return false;
 	}
 

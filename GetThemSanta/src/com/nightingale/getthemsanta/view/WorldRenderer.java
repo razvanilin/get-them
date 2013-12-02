@@ -201,6 +201,7 @@ public class WorldRenderer {
 	private void dispose(SpriteBatch spriteBatch){
 		System.out.println("Sprite Batch disposed");
 		spriteBatch.dispose();
+		white.dispose();
 	}
 	
 	public int getScore(){
