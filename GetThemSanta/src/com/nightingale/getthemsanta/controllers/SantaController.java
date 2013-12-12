@@ -17,8 +17,6 @@ public class SantaController {
 		LEFT, RIGHT
 	}
 	
-	private static final float GRAVITY = -20f;
-	
 	private World world;
 	private Santa santa;
 	private WorldRenderer renderer;
@@ -30,9 +28,6 @@ public class SantaController {
 		keys.put(Keys.LEFT, false);
 		keys.put(Keys.RIGHT, false);
 	};
-	
-	private float ppuX;
-	private float ppuY;
 	
 	public SantaController(World world, Game game){
 		this.game = game;
@@ -56,46 +51,41 @@ public class SantaController {
 	
 	public void update(float delta){
 		processInput();
-		/*
-		santa.getAcceleration().y = GRAVITY;
-		santa.getAcceleration().mul(delta);
-		santa.getVelocity().add(santa.getAcceleration().x, santa.getAcceleration().y);
-		*/
 		santa.update(delta);
 	}
 
 	float accelX;
 	private void processInput() {
-		//System.out.println("Input");
-		ppuX = renderer.ppuX;
-		ppuY = renderer.ppuY;
+		
+		//Android controller using the accelerometer
 		if (Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
-				if (santa.getPosition().x >= 0 && santa.getPosition().x <=Gdx.graphics.getWidth()-(santa.getSize()*ppuX)-20){
+				if (santa.getPosition().x >= 0 && santa.getPosition().x <=Gdx.graphics.getWidth()-(santa.getSize()*renderer.ppuX)-20){
 					santa.setPosition(new Vector2(santa.getPosition().x - Gdx.input.getAccelerometerX(), santa.getPosition().y));
 				}
-				else if (santa.getPosition().x<=santa.getSize()*ppuX)
+				else if (santa.getPosition().x<=santa.getSize()*renderer.ppuX)
 					santa.setPosition(new Vector2(santa.getPosition().x + 1 , santa.getPosition().y));
-				else if (santa.getPosition().x>=Gdx.graphics.getWidth()-(santa.getSize()*ppuX)-20)
+				else if (santa.getPosition().x>=Gdx.graphics.getWidth()-(santa.getSize()*renderer.ppuX)-20)
 					santa.setPosition(new Vector2(santa.getPosition().x - 1, santa.getPosition().y));
 
 		}
+		//end of android controller
+		
+		//Pc controller using the arrow keys
 		if (keys.get(Keys.LEFT)) {
 			santa.setState(State.LEFT);
-			if (santa.getPosition().x >= santa.getSize()*ppuX){
-				//santa.getAcceleration().x = -20f;
+			if (santa.getPosition().x >= santa.getSize()*renderer.ppuX){
 				santa.setPosition(new Vector2(santa.getPosition().x - 20, santa.getPosition().y));
-			//System.out.println("moved left");
 			}
 		}
 		
 		if (keys.get(Keys.RIGHT)) {
 			santa.setState(State.RIGHT);
-			if (santa.getPosition().x <= Gdx.graphics.getWidth()-(santa.getSize()*ppuX)){
-				//santa.getAcceleration().x = 20f;
+			if (santa.getPosition().x <= Gdx.graphics.getWidth()-(santa.getSize()*renderer.ppuX)){
 				santa.setPosition(new Vector2(santa.getPosition().x + 20, santa.getPosition().y));
-				//System.out.println("moved right");
 			}
 		}
+		
+		//end of pc controller
 		
 	}
 }

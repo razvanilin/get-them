@@ -1,7 +1,6 @@
 package com.nightingale.getthemsanta;
 
 import com.badlogic.gdx.Game;
-import com.nightingale.getthemsanta.screens.GameScreen;
 import com.nightingale.getthemsanta.screens.MenuScreen;
 
 public class SantaMain extends Game {

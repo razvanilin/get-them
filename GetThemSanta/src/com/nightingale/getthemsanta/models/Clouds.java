@@ -2,7 +2,6 @@ package com.nightingale.getthemsanta.models;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,6 @@ public class Clouds {
 	
 	public final float SIZE_WIDTH = 1.3f;
 	public final float SIZE_HEIGHT = 1f;
-	private static final float ACCELERATION = 20f;
 	
 	public ArrayList<Rectangle> clouds;
 	public Texture texture;
