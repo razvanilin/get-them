@@ -1,0 +1,47 @@
+
+button.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button-blue-0
+  rotate: false
+  xy: 1, 1
+  size: 97, 98
+  split: 15, 17, 15, 16
+  orig: 97, 98
+  offset: 0, 0
+  index: -1
+button-blue-1
+  rotate: false
+  xy: 100, 1
+  size: 97, 98
+  split: 15, 15, 15, 15
+  orig: 97, 98
+  offset: 0, 0
+  index: -1
+
+button2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+data/buttonSample
+  rotate: false
+  xy: 1, 1
+  size: 465, 240
+  orig: 465, 240
+  offset: 0, 0
+  index: -1
+data/button-blue-0
+  rotate: false
+  xy: 468, 143
+  size: 97, 98
+  orig: 97, 98
+  offset: 0, 0
+  index: -1
+data/button-blue-1
+  rotate: false
+  xy: 468, 43
+  size: 97, 98
+  orig: 97, 98
+  offset: 0, 0
+  index: -1

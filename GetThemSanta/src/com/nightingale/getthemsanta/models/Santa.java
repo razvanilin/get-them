@@ -13,8 +13,6 @@ public class Santa {
 	private static final float SIZE = 0.5f;
 	
 	Vector2         position = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-	Vector2         acceleration = new Vector2();
-	Vector2         velocity = new Vector2();
 	Rectangle       bounds = new Rectangle();
 	State           state = State.IDLE;
 	float			stateTime = 0;
@@ -37,20 +35,6 @@ public class Santa {
 		return position;
 	}
 	
-	public void setAcceleration(Vector2 acceleration){
-		this.acceleration = acceleration;
-	}
-	public Vector2 getAcceleration(){
-		return acceleration;
-	}
-	
-	public void setVelocity(Vector2 velocity){
-		this.velocity = velocity;
-	}
-	public Vector2 getVelocity(){
-		return velocity;
-	}
-	
 	public void setState(State newState){
 		state = newState;
 	}
@@ -64,6 +48,12 @@ public class Santa {
 	
 	public Rectangle getBounds(){
 		return bounds;
+	}
+	public void setBounds(float ppuX, float ppuY){
+		System.out.println("been Here!");
+		bounds.width = SIZE*ppuX;
+		bounds.height = SIZE*ppuY;
+		System.out.println(bounds.width+" "+bounds.height);
 	}
 	
 	public void update(float delta){

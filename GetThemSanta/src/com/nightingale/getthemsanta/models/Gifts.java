@@ -2,7 +2,6 @@ package com.nightingale.getthemsanta.models;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -16,12 +15,8 @@ public class Gifts {
 	Vector2 position = new Vector2();
 	Rectangle bounds = new Rectangle();
 	
-	public Gifts(Vector2 pos){
+	public Gifts(){
 		gifts = new ArrayList<Rectangle>();
-		texture = new Texture(Gdx.files.internal("data/gift.png"));
-		this.position = pos;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
 		this.bounds.width = SIZE;
 		this.bounds.height = SIZE;
 	}
