@@ -1,5 +1,9 @@
 package com.nightingale.getthemsanta.screens;
 
+import aurelienribon.tweenengine.Timeline;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.nightingale.getthemsanta.tween.ActorAccesor;
 
 public class MenuScreen implements Screen{
 
@@ -34,16 +40,20 @@ public class MenuScreen implements Screen{
 	private TextButton buttonExit, buttonPlay;
 	private BitmapFont white, black;
 	private Label heading;
+	private TweenManager tweenManager;
 	
 	
 	public MenuScreen(Game game){
 		this.game = game;
+
 	}
 	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Table.drawDebug(stage);
+		
+		tweenManager.update(delta);
 		
 		stage.act(delta);
 		spriteBatch.begin();
@@ -55,8 +65,9 @@ public class MenuScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		stage.setViewport(width, height, true);
+		table.invalidateHierarchy();
+		table.setSize(width, height);
 	}
 
 	@Override
@@ -85,6 +96,7 @@ public class MenuScreen implements Screen{
 			textButtonStyle.pressedOffsetY = -1;
 			textButtonStyle.font = black;
 		
+		//Button PLAY
 		buttonPlay = new TextButton("Play", textButtonStyle);
 		buttonPlay.pad(20);
 		buttonPlay.addListener(new ClickListener(){
@@ -93,6 +105,8 @@ public class MenuScreen implements Screen{
 				 game.setScreen(new GameScreen(game));
 			}
 		});
+		
+		//Button EXIT
 		buttonExit = new TextButton("Exit", textButtonStyle);
 		buttonExit.pad(20);
 		buttonExit.addListener(new ClickListener(){
@@ -116,24 +130,33 @@ public class MenuScreen implements Screen{
 		table.add(buttonExit);
 		table.debug();
 		stage.addActor(table);
-			
+		
+		//creating animations
+		tweenManager = new TweenManager();
+		Tween.registerAccessor(Actor.class, new ActorAccesor());
+		
+		//heading and buttons fade in
+		Timeline.createSequence().beginSequence()
+			.push(Tween.set(buttonPlay, ActorAccesor.ALPHA).target(0))
+			.push(Tween.set(buttonExit, ActorAccesor.ALPHA).target(0))
+			.push(Tween.from(heading, ActorAccesor.ALPHA, 1f).target(0))
+			.push(Tween.to(buttonPlay, ActorAccesor.ALPHA, .5f).target(1))
+			.push(Tween.to(buttonExit, ActorAccesor.ALPHA, .5f).target(1))
+			.end().start(tweenManager);
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -144,6 +167,7 @@ public class MenuScreen implements Screen{
 		atlas.dispose();
 		spriteBatch.dispose();
 		black.dispose();
+		white.dispose();
 	}
 
 }
