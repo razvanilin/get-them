@@ -51,7 +51,6 @@ public class SantaController {
 	
 	public void update(float delta){
 		processInput();
-		santa.update(delta);
 	}
 
 	float accelX;

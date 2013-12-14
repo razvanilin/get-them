@@ -1,12 +1,24 @@
 package com.nightingale.getthemsanta.screens;
 
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nightingale.getthemsanta.controllers.SantaController;
 import com.nightingale.getthemsanta.models.World;
 import com.nightingale.getthemsanta.view.WorldRenderer;
@@ -17,12 +29,26 @@ public class GameScreen implements Screen, InputProcessor{
 	private WorldRenderer renderer;
 	private SantaController controller;
 	private SpriteBatch spriteBatch;
+	private Stage stage;
+	private TextureAtlas atlas;
+	private Skin skin;
+	private Table table;
+	private TextButton buttonResume, buttonMenu;
+	private Label heading;
+	private TweenManager tweenManager;
 	
 	private Game game;
+	
+	private TextureRegion backgroundTexture;
 	
 	public float level;
 	
 	private int width, height;
+	
+	private enum GameState {
+		PLAY, PAUSE
+	}
+	private GameState gameState;
 	
 	public GameScreen(Game game){
 		this.game=game;
@@ -37,8 +63,24 @@ public class GameScreen implements Screen, InputProcessor{
 		//Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		renderer.render();
-		controller.update(delta);
+		spriteBatch.begin();
+		spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+		spriteBatch.end();
+		
+		if (gameState == GameState.PLAY){
+			Gdx.input.setInputProcessor(this);
+			renderer.render();
+			controller.update(delta);
+		}
+		else{
+			stage.act(delta);
+			spriteBatch.begin();
+			spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			spriteBatch.end();
+			stage.draw();
+			
+		}
+		
 	}
 
 	@Override
@@ -53,8 +95,58 @@ public class GameScreen implements Screen, InputProcessor{
 		world = new World();
 		renderer = new WorldRenderer(world, game, level);
 		controller = new SantaController(world, game);
-		Gdx.input.setInputProcessor(this);
+		spriteBatch = new SpriteBatch();
+		
+		gameState = GameState.PLAY;
 
+		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")));
+		
+		Gdx.input.setInputProcessor(this);
+	}
+	
+	private void drawPauseMenu(){
+		//creating the Pause Menu
+		stage = new Stage();
+		
+		Gdx.input.setInputProcessor(stage);
+		
+		atlas = new TextureAtlas("data/ui/blueButtons.pack");
+		skin = new Skin(Gdx.files.internal("data/ui/menuSkin.json"), atlas);
+		
+		table = new Table(skin);
+		table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		//create heading
+		heading = new Label("Game Paused", skin);
+		
+		//create buttons
+		buttonResume = new TextButton("Resume", skin);
+		buttonResume.pad(20);
+		buttonResume.addListener(new ClickListener(){ 
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				gameState = GameState.PLAY;
+				dispose();
+			}
+		});
+		buttonMenu = new TextButton("Main Menu", skin);
+		buttonMenu.pad(20);
+		buttonMenu.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				game.setScreen(new MenuScreen(game));
+				dispose();
+			}
+		});
+		
+		table.add(heading);
+		table.getCell(heading).spaceBottom(200);
+		table.row();
+		table.add(buttonResume);
+		table.getCell(buttonResume).spaceBottom(30);
+		table.row();
+		table.add(buttonMenu);
+		stage.addActor(table);
 	}
 
 	@Override
@@ -64,20 +156,18 @@ public class GameScreen implements Screen, InputProcessor{
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void dispose() {
-		
-		
+		stage.dispose();
+		atlas.dispose();
 	}
 	
 	
@@ -107,7 +197,6 @@ public class GameScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -120,6 +209,8 @@ public class GameScreen implements Screen, InputProcessor{
 			controller.leftPressed();
 		if (screenX > width/2)
 			controller.rightPressed();*/
+		gameState = GameState.PAUSE;
+		drawPauseMenu();
 		return true;
 	}
 
@@ -137,19 +228,16 @@ public class GameScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

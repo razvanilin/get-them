@@ -12,6 +12,6 @@
 		"default": { "font": black, "fontColor": black }
 	},
 	"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-		"default": { "up": "button-blue-0" , "down": "button-blue-1" , "font": black, "pressedOffsetX": 1, "pressedOffsetY": -1 }
+		"default": { "up": "button-blue-1" , "down": "button-down" , "font": black, "pressedOffsetX": 1, "pressedOffsetY": -1 }
 	}
 }

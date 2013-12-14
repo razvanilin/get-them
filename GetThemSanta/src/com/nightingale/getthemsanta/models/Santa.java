@@ -15,8 +15,6 @@ public class Santa {
 	Vector2         position = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	Rectangle       bounds = new Rectangle();
 	State           state = State.IDLE;
-	float			stateTime = 0;
-	
 	
 	public Santa(Vector2 position){
 		this.position = position;
@@ -55,8 +53,5 @@ public class Santa {
 		bounds.height = SIZE*ppuY;
 		System.out.println(bounds.width+" "+bounds.height);
 	}
-	
-	public void update(float delta){
-		stateTime+=delta;
-	}
+
 }

@@ -69,7 +69,7 @@ public class LevelScreen implements Screen {
 		
 		Gdx.input.setInputProcessor(stage);
 		
-		atlas = new TextureAtlas("data/ui/button.pack");
+		atlas = new TextureAtlas("data/ui/blueButtons.pack");
 		skin = new Skin(Gdx.files.internal("data/ui/menuSkin.json"), atlas);
 		
 		table = new Table(skin);
@@ -85,6 +85,7 @@ public class LevelScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				game.setScreen(new GameScreen(game, 60));
+				dispose();
 			}
 		});
 		buttonLevelTwo = new TextButton("2 Minutes Challenge", skin);
@@ -93,6 +94,7 @@ public class LevelScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				game.setScreen(new GameScreen(game, 120));
+				dispose();
 			}
 		});
 		buttonLevelThree = new TextButton("Unlimited Time", skin);
@@ -101,6 +103,7 @@ public class LevelScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				game.setScreen(new GameScreen(game, -10));
+				dispose();
 			}
 		});
 		buttonBack = new TextButton("Back", skin);
@@ -122,10 +125,9 @@ public class LevelScreen implements Screen {
 		table.getCell(buttonLevelTwo).spaceBottom(10);
 		table.row();
 		table.add(buttonLevelThree);
-		table.getCell(buttonLevelThree).spaceBottom(10);
+		table.getCell(buttonLevelThree).spaceBottom(30);
 		table.row();
 		table.add(buttonBack);
-		table.getCell(buttonBack).spaceBottom(30);
 		stage.addActor(table);
 		
 		//creating animations
@@ -138,10 +140,10 @@ public class LevelScreen implements Screen {
 			.push(Tween.set(buttonLevelTwo, ActorAccesor.ALPHA).target(0))
 			.push(Tween.set(buttonLevelThree, ActorAccesor.ALPHA).target(0))
 			.push(Tween.set(buttonBack, ActorAccesor.ALPHA).target(0))
-			.push(Tween.from(heading, ActorAccesor.ALPHA, 1f).target(0))
-			.push(Tween.to(buttonLevelOne, ActorAccesor.ALPHA, .5f).target(1))
-			.push(Tween.to(buttonLevelTwo, ActorAccesor.ALPHA, .5f).target(1))
-			.push(Tween.to(buttonLevelThree, ActorAccesor.ALPHA, .5f).target(1))
+			.push(Tween.from(heading, ActorAccesor.ALPHA, .8f).target(0))
+			.push(Tween.to(buttonLevelOne, ActorAccesor.ALPHA, .3f).target(1))
+			.push(Tween.to(buttonLevelTwo, ActorAccesor.ALPHA, .3f).target(1))
+			.push(Tween.to(buttonLevelThree, ActorAccesor.ALPHA, .3f).target(1))
 			.push(Tween.to(buttonBack, ActorAccesor.ALPHA, .5f).target(1))
 			.end().start(tweenManager);
 	}
@@ -163,7 +165,10 @@ public class LevelScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+		stage.dispose();
+		spriteBatch.dispose();
+		atlas.dispose();
+		skin.dispose();
 	}
 
 }
