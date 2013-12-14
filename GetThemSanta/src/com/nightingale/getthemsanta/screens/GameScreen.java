@@ -20,13 +20,18 @@ public class GameScreen implements Screen, InputProcessor{
 	
 	private Game game;
 	
+	public float level;
+	
 	private int width, height;
-	private boolean passed=false;
 	
 	public GameScreen(Game game){
 		this.game=game;
 	}
-
+	public GameScreen(Game game, float level){
+		this.game = game;
+		this.level = level;
+	}
+	
 	@Override
 	public void render(float delta) {
 		//Gdx.gl.glClearColor(0, 1, 0, 1);
@@ -46,7 +51,7 @@ public class GameScreen implements Screen, InputProcessor{
 	@Override
 	public void show() {
 		world = new World();
-		renderer = new WorldRenderer(world, game);
+		renderer = new WorldRenderer(world, game, level);
 		controller = new SantaController(world, game);
 		Gdx.input.setInputProcessor(this);
 

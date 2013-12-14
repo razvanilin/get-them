@@ -33,7 +33,7 @@ public class SantaController {
 		this.game = game;
 		this.world = world;
 		this.santa = world.getSanta();
-		renderer = new WorldRenderer(world, game);
+		renderer = new WorldRenderer();
 	}
 	
 	public void leftPressed(){

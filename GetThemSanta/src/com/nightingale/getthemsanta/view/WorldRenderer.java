@@ -12,6 +12,7 @@ import com.nightingale.getthemsanta.models.Gifts;
 import com.nightingale.getthemsanta.models.Santa;
 import com.nightingale.getthemsanta.models.World;
 import com.nightingale.getthemsanta.screens.EndingScreen;
+import com.nightingale.getthemsanta.screens.GameScreen;
 
 public class WorldRenderer {
 	
@@ -39,13 +40,16 @@ public class WorldRenderer {
 	boolean gameDone = false;
 	private BitmapFont white;
 	
+	private float level;
+	
 	public WorldRenderer(){
 		
 	}
 
-	public WorldRenderer(World world, Game game){
+	public WorldRenderer(World world, Game game, float level){
 		this.game = game;
 		this.world = world;
+		this.level = level;
 		cloud = world.getCloud();
 		santa = world.getSanta();
 		gift = world.getGift();
@@ -81,8 +85,18 @@ public class WorldRenderer {
 	int score = 0;
 	int scoreMultiplier = 1;
 	
+	
 	public void render(){
-		
+
+		if (level != -10){
+			level -=Gdx.graphics.getDeltaTime();
+//			System.out.println(level);
+			if (level < 0)
+			{
+				game.setScreen(new EndingScreen(score, game));
+			}
+		}
+		System.out.println(Gdx.graphics.getDeltaTime());
 		hitCount = 0;
 		cloudHit=false;
 		velocity += Gdx.graphics.getDeltaTime()+(1/2*velocity);
@@ -135,6 +149,8 @@ public class WorldRenderer {
 				drawCloud();
 				drawGift();
 				white.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
+				if (level != -10)
+					white.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-100);
 
 				if (velocity>15f)
 					white.draw(spriteBatch, "You're falling too fast!", 20, Gdx.graphics.getHeight()-200);
@@ -146,13 +162,6 @@ public class WorldRenderer {
 		else {
 			game.setScreen(new EndingScreen(score, game));
 			dispose(spriteBatch);
-			/*
-			spriteBatch.begin();
-				spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-				white.draw(spriteBatch, "Santa fainted! He fell too fast", 20, Gdx.graphics.getHeight()-20);
-				white.draw(spriteBatch, "Your score: "+score, 20, Gdx.graphics.getHeight()-200);
-			spriteBatch.end();
-			*/
 		}
 		
 	}
