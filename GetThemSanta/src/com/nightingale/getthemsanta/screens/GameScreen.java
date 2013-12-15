@@ -99,7 +99,7 @@ public class GameScreen implements Screen, InputProcessor{
 		
 		gameState = GameState.PLAY;
 
-		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")));
+		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		Gdx.input.setInputProcessor(this);
 	}
