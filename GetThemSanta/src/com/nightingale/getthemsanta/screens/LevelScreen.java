@@ -79,7 +79,7 @@ public class LevelScreen implements Screen {
 		heading = new Label("Select Challenge", skin);
 		
 		//create buttons
-		buttonLevelOne = new TextButton("1 Minute Challenge", skin);
+		buttonLevelOne = new TextButton("1 Minute \nChallenge", skin);
 		buttonLevelOne.pad(20);
 		buttonLevelOne.addListener(new ClickListener(){ 
 			@Override
@@ -88,7 +88,7 @@ public class LevelScreen implements Screen {
 				dispose();
 			}
 		});
-		buttonLevelTwo = new TextButton("2 Minutes Challenge", skin);
+		buttonLevelTwo = new TextButton("2 Minutes \nChallenge", skin);
 		buttonLevelTwo.pad(20);
 		buttonLevelTwo.addListener(new ClickListener(){
 			@Override
