@@ -12,3 +12,5 @@ Download the APK here:
 
 
 You can intall APK files from your android device if you have an app like this one: https://play.google.com/store/apps/details?id=com.potente.apk.installer
+
+NOTE: The application will look ok only on 720p screens and above. I will try to make it look ok for other screens soon.
