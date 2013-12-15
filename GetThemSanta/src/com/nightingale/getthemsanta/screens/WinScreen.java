@@ -22,9 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nightingale.getthemsanta.tween.ActorAccesor;
 
-public class MenuScreen implements Screen{
+public class WinScreen implements Screen{
 
-	private Game game;
+private Game game;
 	
 	private TextureRegion backgroundTexture;
 	private SpriteBatch spriteBatch;
@@ -33,13 +33,15 @@ public class MenuScreen implements Screen{
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private TextButton buttonExit, buttonPlay;
-	private Label heading;
+	private TextButton buttonBack;
+	private Label heading, scoreLabel;
 	private TweenManager tweenManager;
 	
-	public MenuScreen(Game game){
+	private int score;
+	
+	public WinScreen(Game game, int score){
 		this.game = game;
-
+		this.score = score;
 	}
 	
 	@Override
@@ -54,7 +56,6 @@ public class MenuScreen implements Screen{
 		spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		spriteBatch.end();
 		stage.draw();
-		
 	}
 
 	@Override
@@ -80,38 +81,26 @@ public class MenuScreen implements Screen{
 		table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		//Button PLAY
-		buttonPlay = new TextButton("Play", skin);
-		buttonPlay.pad(20);
-		buttonPlay.addListener(new ClickListener(){
+		buttonBack = new TextButton("Play Again", skin);
+		buttonBack.pad(20);
+		buttonBack.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				 game.setScreen(new LevelScreen(game));
 			}
 		});
 		
-		//Button EXIT
-		buttonExit = new TextButton("Exit", skin);
-		buttonExit.pad(20);
-		buttonExit.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
-			}
-		});
-		
-		
-		heading = new Label("Get Them Santa!", skin);
+		heading = new Label("Congratulations!", skin);
+		scoreLabel = new Label("Your score is: "+score, skin);
 		
 		//putting all that into a table
 		table.add(heading);
 		table.getCell(heading).spaceBottom(250);
 		table.row();
-		table.add(buttonPlay);
-		table.getCell(buttonPlay).spaceBottom(20);
+		table.add(scoreLabel);
+		table.getCell(scoreLabel).spaceBottom(100);
 		table.row();
-		table.add(buttonExit);
-		table.getCell(buttonExit).spaceBottom(20);
-		table.debug();
+		table.add(buttonBack);
 		stage.addActor(table);
 		
 		//creating animations
@@ -120,11 +109,11 @@ public class MenuScreen implements Screen{
 		
 		//heading and buttons fade in
 		Timeline.createSequence().beginSequence()
-			.push(Tween.set(buttonPlay, ActorAccesor.ALPHA).target(0))
-			.push(Tween.set(buttonExit, ActorAccesor.ALPHA).target(0))
+			.push(Tween.set(buttonBack, ActorAccesor.ALPHA).target(0))
+			.push(Tween.set(scoreLabel, ActorAccesor.ALPHA).target(0))
 			.push(Tween.from(heading, ActorAccesor.ALPHA, 1f).target(0))
-			.push(Tween.to(buttonPlay, ActorAccesor.ALPHA, .5f).target(1))
-			.push(Tween.to(buttonExit, ActorAccesor.ALPHA, .5f).target(1))
+			.push(Tween.to(scoreLabel, ActorAccesor.ALPHA, .5f).target(1))
+			.push(Tween.to(buttonBack, ActorAccesor.ALPHA, .5f).target(1))
 			.end().start(tweenManager);
 	}
 

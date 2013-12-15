@@ -33,7 +33,7 @@ public class SantaController {
 		this.game = game;
 		this.world = world;
 		this.santa = world.getSanta();
-		renderer = new WorldRenderer(world, game);
+		renderer = new WorldRenderer();
 	}
 	
 	public void leftPressed(){
@@ -51,7 +51,6 @@ public class SantaController {
 	
 	public void update(float delta){
 		processInput();
-		santa.update(delta);
 	}
 
 	float accelX;

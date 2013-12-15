@@ -22,26 +22,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nightingale.getthemsanta.tween.ActorAccesor;
 
-public class MenuScreen implements Screen{
-
+public class LevelScreen implements Screen {
+	
 	private Game game;
 	
-	private TextureRegion backgroundTexture;
 	private SpriteBatch spriteBatch;
-
+	private TextureRegion backgroundTexture;
+	
 	private Stage stage;
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private TextButton buttonExit, buttonPlay;
+	private TextButton buttonLevelOne, buttonLevelTwo, buttonLevelThree, buttonBack;
 	private Label heading;
 	private TweenManager tweenManager;
 	
-	public MenuScreen(Game game){
+	public LevelScreen(Game game){
 		this.game = game;
-
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -51,24 +50,21 @@ public class MenuScreen implements Screen{
 		
 		stage.act(delta);
 		spriteBatch.begin();
-		spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		spriteBatch.end();
 		stage.draw();
-		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		stage.setViewport(width, height, true);
-		table.invalidateHierarchy();
-		table.setSize(width, height);
+
 	}
 
 	@Override
 	public void show() {
 		spriteBatch = new SpriteBatch();
 		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
+
 		stage = new Stage();
 		
 		Gdx.input.setInputProcessor(stage);
@@ -79,39 +75,59 @@ public class MenuScreen implements Screen{
 		table = new Table(skin);
 		table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
-		//Button PLAY
-		buttonPlay = new TextButton("Play", skin);
-		buttonPlay.pad(20);
-		buttonPlay.addListener(new ClickListener(){
+		//create heading
+		heading = new Label("Select Challenge", skin);
+		
+		//create buttons
+		buttonLevelOne = new TextButton("1 Minute Challenge", skin);
+		buttonLevelOne.pad(20);
+		buttonLevelOne.addListener(new ClickListener(){ 
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				 game.setScreen(new LevelScreen(game));
+			public void clicked(InputEvent event, float x, float y){
+				game.setScreen(new GameScreen(game, 60));
+				dispose();
+			}
+		});
+		buttonLevelTwo = new TextButton("2 Minutes Challenge", skin);
+		buttonLevelTwo.pad(20);
+		buttonLevelTwo.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				game.setScreen(new GameScreen(game, 120));
+				dispose();
+			}
+		});
+		buttonLevelThree = new TextButton("Unlimited Time", skin);
+		buttonLevelThree.pad(20);
+		buttonLevelThree.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				game.setScreen(new GameScreen(game, -10));
+				dispose();
+			}
+		});
+		buttonBack = new TextButton("Back", skin);
+		buttonBack.pad(20);
+		buttonBack.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				game.setScreen(new MenuScreen(game));
 			}
 		});
 		
-		//Button EXIT
-		buttonExit = new TextButton("Exit", skin);
-		buttonExit.pad(20);
-		buttonExit.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
-			}
-		});
-		
-		
-		heading = new Label("Get Them Santa!", skin);
-		
-		//putting all that into a table
 		table.add(heading);
-		table.getCell(heading).spaceBottom(250);
+		table.getCell(heading).spaceBottom(100);
 		table.row();
-		table.add(buttonPlay);
-		table.getCell(buttonPlay).spaceBottom(20);
+		table.add(buttonLevelOne);
+		table.getCell(buttonLevelOne).spaceBottom(10);
 		table.row();
-		table.add(buttonExit);
-		table.getCell(buttonExit).spaceBottom(20);
-		table.debug();
+		table.add(buttonLevelTwo);
+		table.getCell(buttonLevelTwo).spaceBottom(10);
+		table.row();
+		table.add(buttonLevelThree);
+		table.getCell(buttonLevelThree).spaceBottom(30);
+		table.row();
+		table.add(buttonBack);
 		stage.addActor(table);
 		
 		//creating animations
@@ -120,35 +136,39 @@ public class MenuScreen implements Screen{
 		
 		//heading and buttons fade in
 		Timeline.createSequence().beginSequence()
-			.push(Tween.set(buttonPlay, ActorAccesor.ALPHA).target(0))
-			.push(Tween.set(buttonExit, ActorAccesor.ALPHA).target(0))
-			.push(Tween.from(heading, ActorAccesor.ALPHA, 1f).target(0))
-			.push(Tween.to(buttonPlay, ActorAccesor.ALPHA, .5f).target(1))
-			.push(Tween.to(buttonExit, ActorAccesor.ALPHA, .5f).target(1))
+			.push(Tween.set(buttonLevelOne, ActorAccesor.ALPHA).target(0))
+			.push(Tween.set(buttonLevelTwo, ActorAccesor.ALPHA).target(0))
+			.push(Tween.set(buttonLevelThree, ActorAccesor.ALPHA).target(0))
+			.push(Tween.set(buttonBack, ActorAccesor.ALPHA).target(0))
+			.push(Tween.from(heading, ActorAccesor.ALPHA, .8f).target(0))
+			.push(Tween.to(buttonLevelOne, ActorAccesor.ALPHA, .3f).target(1))
+			.push(Tween.to(buttonLevelTwo, ActorAccesor.ALPHA, .3f).target(1))
+			.push(Tween.to(buttonLevelThree, ActorAccesor.ALPHA, .3f).target(1))
+			.push(Tween.to(buttonBack, ActorAccesor.ALPHA, .5f).target(1))
 			.end().start(tweenManager);
 	}
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		stage.dispose();
-		skin.dispose();
-		atlas.dispose();
 		spriteBatch.dispose();
+		atlas.dispose();
+		skin.dispose();
 	}
 
 }
