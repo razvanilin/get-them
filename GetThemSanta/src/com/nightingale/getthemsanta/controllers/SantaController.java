@@ -49,13 +49,13 @@ public class SantaController {
 		keys.get(keys.put(Keys.RIGHT, false));
 	}
 	
-	public void update(float delta){
+	public void update(){
 		processInput();
 	}
 
 	float accelX;
 	private void processInput() {
-		
+//		System.out.println(Gdx.input.getAccelerometerX());
 		//Android controller using the accelerometer
 		if (Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
 				if (santa.getPosition().x >= 0 && santa.getPosition().x <=Gdx.graphics.getWidth()-(santa.getSize()*renderer.ppuX)-20){

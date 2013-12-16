@@ -45,6 +45,8 @@ public class GameScreen implements Screen, InputProcessor{
 	
 	private int width, height;
 	
+	private boolean inputSet = true;
+	
 	private enum GameState {
 		PLAY, PAUSE
 	}
@@ -68,9 +70,12 @@ public class GameScreen implements Screen, InputProcessor{
 		spriteBatch.end();
 		
 		if (gameState == GameState.PLAY){
-			Gdx.input.setInputProcessor(this);
+			if (inputSet){
+				Gdx.input.setInputProcessor(this);
+				inputSet = false;
+			}
 			renderer.render();
-			controller.update(delta);
+			controller.update();
 		}
 		else{
 			stage.act(delta);
@@ -118,7 +123,6 @@ public class GameScreen implements Screen, InputProcessor{
 		
 		//create heading
 		heading = new Label("Game Paused", skin);
-		
 		//create buttons
 		buttonResume = new TextButton("Resume", skin);
 		buttonResume.pad(20);
@@ -126,6 +130,7 @@ public class GameScreen implements Screen, InputProcessor{
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				gameState = GameState.PLAY;
+				inputSet = true;
 				dispose();
 			}
 		});

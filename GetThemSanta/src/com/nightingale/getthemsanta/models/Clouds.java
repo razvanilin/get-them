@@ -3,6 +3,7 @@ package com.nightingale.getthemsanta.models;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,6 +17,8 @@ public class Clouds {
 	
 	Vector2 position = new Vector2();
 	Rectangle bounds = new Rectangle();
+	//PolygonShape body = new PolygonShape();
+	Polygon body = new Polygon();
 	
 	public Clouds() {
 		clouds = new ArrayList<Rectangle>();
@@ -36,7 +39,6 @@ public class Clouds {
 		newCloud.height = SIZE_HEIGHT*ppuY;
 		newCloud.x = x;
 		newCloud.y = y;
-		
 		clouds.add(newCloud);
 	}
 	

@@ -36,7 +36,7 @@ public class WorldRenderer {
 
 	private TextureRegion giftTexture;
 	boolean gameDone = false;
-	private BitmapFont white;
+	private BitmapFont gameFont;
 	
 	private float level;
 	
@@ -54,7 +54,7 @@ public class WorldRenderer {
 		spriteBatch = new SpriteBatch();
 		
 		loadTextures();
-		white = new BitmapFont(Gdx.files.internal("data/fonts/white.fnt"), false);
+		gameFont = new BitmapFont(Gdx.files.internal("data/fonts/game.fnt"), false);
 	}
 	
 	public void setSize(int width, int height){
@@ -73,7 +73,7 @@ public class WorldRenderer {
 	}
 	
 	//render fields
-	float velocity=4f;
+	float velocity=6f;
 	float x;
 	boolean cloudHit = false;
 	boolean xChanged = false;
@@ -104,11 +104,11 @@ public class WorldRenderer {
 		timePassedGift += Gdx.graphics.getDeltaTime();
 
 		/* --- Positioning the models --- */
-		if (timePassedCloud > 2+(2/velocity)){
+		if (timePassedCloud > (7/velocity)){
 			cloud.add(0 + (int)(Math.random()*(Gdx.graphics.getWidth()-cloud.getBounds().width*ppuX)), -50f, ppuX, ppuY);
 			timePassedCloud = 0;
 		}
-		if (timePassedGift>2f){
+		if (timePassedGift>5/velocity){
 			gift.add(0 + (int)(Math.random()*(Gdx.graphics.getWidth()-gift.getBounds().width*ppuX)), -50f, ppuX, ppuY);
 			timePassedGift=0;
 		}
@@ -121,9 +121,11 @@ public class WorldRenderer {
 		for (int k =0; k< cloud.clouds.size();k++){
 			if (santa.getBounds().overlaps(cloud.clouds.get(k))&& hitCount<1){
 				//System.out.println(hitCount);
-				velocity = 4f;
+				if (velocity > 0)
+					velocity -= 6*Gdx.graphics.getDeltaTime();
 				hitCount++;
-				scoreMultiplier=1;
+				if (scoreMultiplier >2)
+					scoreMultiplier -= 2;
 			}
 		}		
 		//gifts
@@ -134,7 +136,7 @@ public class WorldRenderer {
 				gift.gifts.remove(k);
 				k--;
 				score+=scoreMultiplier;
-				scoreMultiplier++;
+				scoreMultiplier+=20;
 			}
 		}
 
@@ -145,13 +147,14 @@ public class WorldRenderer {
 			drawSanta();
 			drawCloud();
 			drawGift();
-			white.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
+			gameFont.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
+			gameFont.draw(spriteBatch, "+"+scoreMultiplier, 20, Gdx.graphics.getHeight()-80);
 			if (level != -10)
-				white.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-100);
+				gameFont.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-120);
 
-			if (velocity>15f)
-				white.draw(spriteBatch, "You're falling too fast!", 20, Gdx.graphics.getHeight()-200);
-			if (velocity>25f)
+			if (velocity>20f)
+				gameFont.draw(spriteBatch, "You're falling too fast!", 20, Gdx.graphics.getHeight()-200);
+			if (velocity>30f)
 				gameDone = true;
 
 			spriteBatch.end();
@@ -206,7 +209,7 @@ public class WorldRenderer {
 	private void dispose(SpriteBatch spriteBatch){
 		System.out.println("Sprite Batch disposed");
 		spriteBatch.dispose();
-		white.dispose();
+		gameFont.dispose();
 	}
 	
 	public int getScore(){
