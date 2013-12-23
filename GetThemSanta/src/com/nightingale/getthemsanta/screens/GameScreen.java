@@ -36,10 +36,9 @@ public class GameScreen implements Screen, InputProcessor{
 	private TextButton buttonResume, buttonMenu;
 	private Label heading;
 	private TweenManager tweenManager;
+	private TextureRegion backgroundTexture;
 	
 	private Game game;
-	
-	private TextureRegion backgroundTexture;
 	
 	public float level;
 	
@@ -65,17 +64,13 @@ public class GameScreen implements Screen, InputProcessor{
 		//Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		spriteBatch.begin();
-		spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-		spriteBatch.end();
-		
 		if (gameState == GameState.PLAY){
 			if (inputSet){
 				Gdx.input.setInputProcessor(this);
-				inputSet = false;
+				inputSet = false; //to set the input once
 			}
 			renderer.render();
-			controller.update();
+			controller.update(renderer.velocity);
 		}
 		else{
 			stage.act(delta);
@@ -102,10 +97,10 @@ public class GameScreen implements Screen, InputProcessor{
 		controller = new SantaController(world, game);
 		spriteBatch = new SpriteBatch();
 		
-		gameState = GameState.PLAY;
-
 		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
+		gameState = GameState.PLAY;
+
 		Gdx.input.setInputProcessor(this);
 	}
 	

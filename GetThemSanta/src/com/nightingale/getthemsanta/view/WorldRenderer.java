@@ -2,10 +2,12 @@ package com.nightingale.getthemsanta.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.nightingale.getthemsanta.models.Clouds;
 import com.nightingale.getthemsanta.models.Gifts;
 import com.nightingale.getthemsanta.models.Santa;
@@ -22,6 +24,7 @@ public class WorldRenderer {
 
 	private TextureRegion santaTexture;
 	private TextureRegion cloudTexture;
+	private TextureRegion backgroundTexture;
 	private World world;
 	private SpriteBatch spriteBatch;
 	
@@ -39,6 +42,7 @@ public class WorldRenderer {
 	private BitmapFont gameFont;
 	
 	private float level;
+	private float defaultSantaPositionY;
 	
 	public WorldRenderer(){
 		
@@ -53,6 +57,8 @@ public class WorldRenderer {
 		gift = world.getGift();
 		spriteBatch = new SpriteBatch();
 		
+		defaultSantaPositionY = santa.getPosition().y;
+		
 		loadTextures();
 		gameFont = new BitmapFont(Gdx.files.internal("data/fonts/game.fnt"), false);
 	}
@@ -66,6 +72,8 @@ public class WorldRenderer {
 	}
 	
 	private void loadTextures()	{
+		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),-20 , -20, Gdx.graphics.getWidth()+20, Gdx.graphics.getHeight()+20);
+		
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/santaSprite.pack"));
 		santaTexture = atlas.findRegion("Santa");
 		cloudTexture = atlas.findRegion("cloud");
@@ -73,7 +81,7 @@ public class WorldRenderer {
 	}
 	
 	//render fields
-	float velocity=6f;
+	public float velocity=6f;
 	float x;
 	boolean cloudHit = false;
 	boolean xChanged = false;
@@ -94,17 +102,24 @@ public class WorldRenderer {
 				game.setScreen(new WinScreen(game, score));
 			}
 		}
-		System.out.println(Gdx.graphics.getDeltaTime());
+//		System.out.println(Gdx.graphics.getDeltaTime());
 		hitCount = 0;
 		cloudHit=false;
-		velocity += Gdx.graphics.getDeltaTime()+(1/2*velocity);
+		
+		if (velocity < 15f)
+			velocity += 2*Gdx.graphics.getDeltaTime()+(1/2*velocity);
+		else if (velocity>=15f && velocity<=23)
+			velocity += Gdx.graphics.getDeltaTime()+(1/2*velocity);
+		else 
+			velocity += .5f*Gdx.graphics.getDeltaTime()+(1/2*velocity);
+		
 		//System.out.println(velocity);
 
 		timePassedCloud += Gdx.graphics.getDeltaTime();
 		timePassedGift += Gdx.graphics.getDeltaTime();
 
 		/* --- Positioning the models --- */
-		if (timePassedCloud > (7/velocity)){
+		if (timePassedCloud > (10/velocity)){
 			cloud.add(0 + (int)(Math.random()*(Gdx.graphics.getWidth()-cloud.getBounds().width*ppuX)), -50f, ppuX, ppuY);
 			timePassedCloud = 0;
 		}
@@ -121,8 +136,8 @@ public class WorldRenderer {
 		for (int k =0; k< cloud.clouds.size();k++){
 			if (santa.getBounds().overlaps(cloud.clouds.get(k))&& hitCount<1){
 				//System.out.println(hitCount);
-				if (velocity > 0)
-					velocity -= 6*Gdx.graphics.getDeltaTime();
+				if (velocity > 6)
+					velocity -= 4*Gdx.graphics.getDeltaTime();
 				hitCount++;
 				if (scoreMultiplier >2)
 					scoreMultiplier -= 2;
@@ -139,11 +154,18 @@ public class WorldRenderer {
 				scoreMultiplier+=20;
 			}
 		}
+		
+		/* --- Animate to show the velocity --- */
+//		System.out.println(ppuY*(velocity-6f));
+		santa.setPosition(new Vector2(santa.getPosition().x, defaultSantaPositionY-(ppuY*(velocity-6f))/8));
+		cloud.animate(-(velocity-6f)/8);
+		gift.animate(-(velocity-6f)/8);
 
 		/* --- Drawing the models --- */	
 		if (!gameDone){
 			spriteBatch.begin();
-
+			spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+			if (velocity>23) shakeBackground(velocity);
 			drawSanta();
 			drawCloud();
 			drawGift();
@@ -151,18 +173,16 @@ public class WorldRenderer {
 			gameFont.draw(spriteBatch, "+"+scoreMultiplier, 20, Gdx.graphics.getHeight()-80);
 			if (level != -10)
 				gameFont.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-120);
-
-			if (velocity>20f)
+			if (velocity>23f)
 				gameFont.draw(spriteBatch, "You're falling too fast!", 20, Gdx.graphics.getHeight()-200);
 			if (velocity>30f)
 				gameDone = true;
-
 			spriteBatch.end();
 		}
 		else {
 			game.setScreen(new LoseScreen(score, game));
-			dispose(spriteBatch);
-		}
+			dispose();
+		}	
 	}
 	
 	private void drawSanta(){
@@ -180,7 +200,6 @@ public class WorldRenderer {
 				);
 		
 	}
-	
 	
 	private void drawCloud(){
 		for (int k = 0; k< cloud.clouds.size();k++){
@@ -205,8 +224,19 @@ public class WorldRenderer {
 				);
 		}
 	}
+	
+	private void shakeBackground(float speed){
+//		Min + (int)(Math.random() * ((Max - Min) + 1))
+		spriteBatch.draw(
+				backgroundTexture, 
+				-.1f*speed + (int)(Math.random() * ((-.1f*speed + 0) + 1)), 
+				-.1f*speed + (int)(Math.random() * ((-.1f*speed + 0) + 1)), 
+				Gdx.graphics.getWidth() + (int)(Math.random() * ((Gdx.graphics.getWidth()+10 - Gdx.graphics.getWidth()) + 1)), 
+				Gdx.graphics.getHeight() + (int)(Math.random() * ((Gdx.graphics.getHeight()+10 - Gdx.graphics.getHeight()) + 1)) 
+				);
+	}
 
-	private void dispose(SpriteBatch spriteBatch){
+	private void dispose(){
 		System.out.println("Sprite Batch disposed");
 		spriteBatch.dispose();
 		gameFont.dispose();
