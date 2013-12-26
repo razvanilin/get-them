@@ -54,7 +54,7 @@ public class SantaController {
 	}
 
 	private void processInput(float velocity) {
-		System.out.println(Gdx.input.getAccelerometerX());
+//		System.out.println(Gdx.input.getAccelerometerX());
 		
 		//Android controller using the accelerometer
 		if (Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){

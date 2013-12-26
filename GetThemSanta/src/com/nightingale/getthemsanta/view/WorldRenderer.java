@@ -1,12 +1,16 @@
 package com.nightingale.getthemsanta.view;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.nightingale.getthemsanta.models.Clouds;
 import com.nightingale.getthemsanta.models.Gifts;
@@ -27,6 +31,8 @@ public class WorldRenderer {
 	private TextureRegion backgroundTexture;
 	private World world;
 	private SpriteBatch spriteBatch;
+	private ParticleEffect effect;
+	private ArrayList<ParticleEffect> effects;
 	
 	private int width;
 	private int height;
@@ -78,6 +84,13 @@ public class WorldRenderer {
 		santaTexture = atlas.findRegion("Santa");
 		cloudTexture = atlas.findRegion("cloud");
 		giftTexture = atlas.findRegion("gift");
+		
+		effects = new ArrayList<ParticleEffect>();
+		
+		effect = new ParticleEffect();
+		effect.load(Gdx.files.internal("effects/mist.p"), Gdx.files.internal("effects"));
+		effect.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+		effect.start();
 	}
 	
 	//render fields
@@ -90,10 +103,11 @@ public class WorldRenderer {
 	int hitCount=0;
 	int score = 0;
 	int scoreMultiplier = 1;
+	Rectangle hit;
 	
 	
-	public void render(){
-		
+	public void render(float delta){
+		//hit = null;
 		if (level != -10){
 			level -=Gdx.graphics.getDeltaTime();
 			//			System.out.println(level);
@@ -139,6 +153,10 @@ public class WorldRenderer {
 				if (velocity > 6)
 					velocity -= 4*Gdx.graphics.getDeltaTime();
 				hitCount++;
+				effect.setPosition(cloud.clouds.get(k).x+(cloud.clouds.get(k).width/2), cloud.clouds.get(k).y+(cloud.clouds.get(k).height/2));
+				effect.start();
+				effects.add(effect);
+				System.out.println("effect added at: "+cloud.clouds.get(k).x+(cloud.clouds.get(k).width/2)+" - "+ cloud.clouds.get(k).y+(cloud.clouds.get(k).height/2));
 				if (scoreMultiplier >2)
 					scoreMultiplier -= 2;
 			}
@@ -147,7 +165,7 @@ public class WorldRenderer {
 		for (int k=0;k<gift.gifts.size();k++)
 		{
 			if (santa.getBounds().overlaps(gift.gifts.get(k))){
-				System.out.println(santa.getBounds().width+ " "+ santa.getBounds().height);
+//				System.out.println(santa.getBounds().width+ " "+ santa.getBounds().height);
 				gift.gifts.remove(k);
 				k--;
 				score+=scoreMultiplier;
@@ -171,18 +189,34 @@ public class WorldRenderer {
 			drawGift();
 			gameFont.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
 			gameFont.draw(spriteBatch, "+"+scoreMultiplier, 20, Gdx.graphics.getHeight()-80);
+			gameFont.draw(spriteBatch, "velocity: "+(int)velocity, Gdx.graphics.getWidth()/1.2f, Gdx.graphics.getHeight()-20);
 			if (level != -10)
 				gameFont.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-120);
 			if (velocity>23f)
 				gameFont.draw(spriteBatch, "You're falling too fast!", 20, Gdx.graphics.getHeight()-200);
 			if (velocity>30f)
 				gameDone = true;
+			//displaying the particle effects
+			for (ParticleEffect newEffect : effects){
+				newEffect.draw(spriteBatch, delta);
+				newEffect.allowCompletion();
+			}
 			spriteBatch.end();
 		}
 		else {
 			game.setScreen(new LoseScreen(score, game));
 			dispose();
-		}	
+		}
+		
+		//cleaning the particle effects array list of finished effects
+		for (int i=0;i<effects.size();i++){
+			if (effects.get(i).isComplete()){
+				effects.remove(i);
+				i++;
+				System.out.println("effect REMOVED");
+			}
+			
+		}
 	}
 	
 	private void drawSanta(){

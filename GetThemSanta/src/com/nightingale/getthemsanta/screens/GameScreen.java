@@ -69,7 +69,7 @@ public class GameScreen implements Screen, InputProcessor{
 				Gdx.input.setInputProcessor(this);
 				inputSet = false; //to set the input once
 			}
-			renderer.render();
+			renderer.render(delta);
 			controller.update(renderer.velocity);
 		}
 		else{
