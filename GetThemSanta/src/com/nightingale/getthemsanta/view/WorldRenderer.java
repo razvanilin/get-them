@@ -189,7 +189,7 @@ public class WorldRenderer {
 			drawGift();
 			gameFont.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
 			gameFont.draw(spriteBatch, "+"+scoreMultiplier, 20, Gdx.graphics.getHeight()-80);
-			gameFont.draw(spriteBatch, "velocity: "+(int)velocity, Gdx.graphics.getWidth()/1.2f, Gdx.graphics.getHeight()-20);
+			gameFont.draw(spriteBatch, "velocity: "+(int)velocity, Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()-20);
 			if (level != -10)
 				gameFont.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-120);
 			if (velocity>23f)
@@ -212,7 +212,7 @@ public class WorldRenderer {
 		for (int i=0;i<effects.size();i++){
 			if (effects.get(i).isComplete()){
 				effects.remove(i);
-				i++;
+				i--;
 				System.out.println("effect REMOVED");
 			}
 			
