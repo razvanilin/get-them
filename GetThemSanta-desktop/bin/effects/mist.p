@@ -2,16 +2,16 @@ mist
 - Delay -
 active: false
 - Duration - 
-lowMin: 500.0
-lowMax: 500.0
+lowMin: 200.0
+lowMax: 200.0
 - Count - 
 min: 0
-max: 250
+max: 500
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 250.0
-highMax: 250.0
+highMin: 100.0
+highMax: 100.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -20,7 +20,7 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 500.0
+highMin: 300.0
 highMax: 1000.0
 relative: false
 scalingCount: 3
@@ -73,7 +73,7 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 30.0
+highMin: 200.0
 highMax: 80.0
 relative: false
 scalingCount: 1
@@ -83,18 +83,18 @@ timeline0: 0.0
 - Angle - 
 active: true
 lowMin: 90.0
-lowMax: 360.0
-highMin: 360.0
-highMax: 360.0
+lowMax: 90.0
+highMin: 45.0
+highMax: 135.0
 relative: false
 scalingCount: 3
-scaling0: 0.0
-scaling1: 0.0
+scaling0: 1.0
+scaling1: 0.09803922
 scaling2: 0.0
 timelineCount: 3
 timeline0: 0.0
-timeline1: 0.53424656
-timeline2: 1.0
+timeline1: 0.49315068
+timeline2: 0.9794521
 - Rotation - 
 active: false
 - Wind - 

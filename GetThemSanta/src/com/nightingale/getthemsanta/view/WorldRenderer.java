@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,8 +32,11 @@ public class WorldRenderer {
 	private TextureRegion backgroundTexture;
 	private World world;
 	private SpriteBatch spriteBatch;
-	private ParticleEffect effect;
+	private ParticleEffect cloudEffect;
+	private ParticleEffect giftEffect;
+	private ParticleEffect charEffect;
 	private ArrayList<ParticleEffect> effects;
+	
 	
 	private int width;
 	private int height;
@@ -65,7 +69,8 @@ public class WorldRenderer {
 		
 		defaultSantaPositionY = santa.getPosition().y;
 		
-		loadTextures();
+		loadItems();
+		
 		gameFont = new BitmapFont(Gdx.files.internal("data/fonts/game.fnt"), false);
 	}
 	
@@ -77,24 +82,36 @@ public class WorldRenderer {
 		santa.setBounds(ppuX, ppuY);
 	}
 	
-	private void loadTextures()	{
+	private void loadItems()	{
 		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),-20 , -20, Gdx.graphics.getWidth()+20, Gdx.graphics.getHeight()+20);
 		
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/santaSprite.pack"));
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/gameModels.pack"));
 		santaTexture = atlas.findRegion("Santa");
 		cloudTexture = atlas.findRegion("cloud");
-		giftTexture = atlas.findRegion("gift");
+		giftTexture = atlas.findRegion("gift0");
 		
+		/** Effects */
 		effects = new ArrayList<ParticleEffect>();
 		
-		effect = new ParticleEffect();
-		effect.load(Gdx.files.internal("effects/mist.p"), Gdx.files.internal("effects"));
-		effect.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-		effect.start();
+		cloudEffect = new ParticleEffect();
+		cloudEffect.load(Gdx.files.internal("effects/mist.p"), Gdx.files.internal("effects"));
+		cloudEffect.setPosition(0, 0);
+		cloudEffect.start();
+		
+		giftEffect = new ParticleEffect();
+		giftEffect.load(Gdx.files.internal("effects/gift.p"), Gdx.files.internal("effects"));
+		giftEffect.setPosition(0, 0);
+		giftEffect.start();
+		
+		charEffect = new ParticleEffect();
+		charEffect.load(Gdx.files.internal("effects/wave.p"), Gdx.files.internal("effects"));
+		charEffect.setPosition(0, 0);
+		charEffect.start();
 	}
 	
 	//render fields
 	public float velocity=6f;
+	float abstractVelocity = 6f;
 	float x;
 	boolean cloudHit = false;
 	boolean xChanged = false;
@@ -104,7 +121,8 @@ public class WorldRenderer {
 	int score = 0;
 	int scoreMultiplier = 1;
 	Rectangle hit;
-	
+	boolean animate = false;
+	float timeTillLastCloudHit=0f;
 	
 	public void render(float delta){
 		//hit = null;
@@ -119,13 +137,20 @@ public class WorldRenderer {
 //		System.out.println(Gdx.graphics.getDeltaTime());
 		hitCount = 0;
 		cloudHit=false;
+		timeTillLastCloudHit += Gdx.graphics.getDeltaTime();
 		
-		if (velocity < 15f)
-			velocity += 2*Gdx.graphics.getDeltaTime()+(1/2*velocity);
-		else if (velocity>=15f && velocity<=23)
-			velocity += Gdx.graphics.getDeltaTime()+(1/2*velocity);
-		else 
-			velocity += .5f*Gdx.graphics.getDeltaTime()+(1/2*velocity);
+		if (velocity < 15f){
+			velocity += 2*Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+			abstractVelocity += 2*Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+		}
+		else if (velocity>=15f && velocity<=23){
+			velocity += Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+			abstractVelocity += Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+		}
+		else {
+//			velocity += .5f*Gdx.graphics.getDeltaTime()+(1/2*velocity);
+			abstractVelocity += .5f*Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+		}
 		
 		//System.out.println(velocity);
 
@@ -141,37 +166,61 @@ public class WorldRenderer {
 			gift.add(0 + (int)(Math.random()*(Gdx.graphics.getWidth()-gift.getBounds().width*ppuX)), -50f, ppuX, ppuY);
 			timePassedGift=0;
 		}
-		/* --- Animate the models --- */
-		cloud.animate(velocity);
-		gift.animate(velocity);
-
+		//character velocity effect
+		charEffect.setPosition(santa.getPosition().x+(santa.getBounds().width/2), santa.getPosition().y);
+		
 		/* --- Collision detection --- */
 		//clouds
 		for (int k =0; k< cloud.clouds.size();k++){
-			if (santa.getBounds().overlaps(cloud.clouds.get(k))&& hitCount<1){
+			if (santa.getBounds().overlaps(cloud.clouds.get(k))/*&& hitCount<1*/){
 				//System.out.println(hitCount);
-				if (velocity > 6)
+				if (velocity > 6){
 					velocity -= 4*Gdx.graphics.getDeltaTime();
-				hitCount++;
-				effect.setPosition(cloud.clouds.get(k).x+(cloud.clouds.get(k).width/2), cloud.clouds.get(k).y+(cloud.clouds.get(k).height/2));
-				effect.start();
-				effects.add(effect);
-				System.out.println("effect added at: "+cloud.clouds.get(k).x+(cloud.clouds.get(k).width/2)+" - "+ cloud.clouds.get(k).y+(cloud.clouds.get(k).height/2));
+					abstractVelocity -= 4*Gdx.graphics.getDeltaTime();
+				}
+				if (timeTillLastCloudHit>.5f){
+//					cloudEffect.setPosition(cloud.clouds.get(k).x+(cloud.clouds.get(k).width/2), cloud.clouds.get(k).y+(cloud.clouds.get(k).height/2));
+					cloudEffect.setPosition(santa.getPosition().x+(santa.getBounds().width/2), santa.getPosition().y);
+					cloudEffect.start();
+					effects.add(cloudEffect);
+					timeTillLastCloudHit = 0f;
+				}
+//				System.out.println("effect added at: "+cloud.clouds.get(k).x+(cloud.clouds.get(k).width/2)+" - "+ cloud.clouds.get(k).y+(cloud.clouds.get(k).height/2));
 				if (scoreMultiplier >2)
 					scoreMultiplier -= 2;
+				break;
 			}
 		}		
 		//gifts
 		for (int k=0;k<gift.gifts.size();k++)
 		{
 			if (santa.getBounds().overlaps(gift.gifts.get(k))){
-//				System.out.println(santa.getBounds().width+ " "+ santa.getBounds().height);
+				giftEffect.setPosition(gift.gifts.get(k).x+(gift.gifts.get(k).width/2), gift.gifts.get(k).y+(gift.gifts.get(k).height/2));
+				giftEffect.start();
+				effects.add(giftEffect);
 				gift.gifts.remove(k);
 				k--;
 				score+=scoreMultiplier;
 				scoreMultiplier+=20;
+				animate = true;
 			}
 		}
+
+		//cleaning the particle effects array list of finished effects
+		for (int i=0;i<effects.size();i++){
+			if (effects.get(i).isComplete()){
+				effects.remove(i);
+				i--;
+//				System.out.println("effect REMOVED");
+			}
+			
+		}
+		
+		/* --- Animate the models --- */
+		cloud.animate(velocity);
+		gift.animate(velocity);
+
+		
 		
 		/* --- Animate to show the velocity --- */
 //		System.out.println(ppuY*(velocity-6f));
@@ -183,23 +232,29 @@ public class WorldRenderer {
 		if (!gameDone){
 			spriteBatch.begin();
 			spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-			if (velocity>23) shakeBackground(velocity);
+			if (abstractVelocity>23) shakeBackground(abstractVelocity);
 			drawSanta();
 			drawCloud();
 			drawGift();
 			gameFont.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
 			gameFont.draw(spriteBatch, "+"+scoreMultiplier, 20, Gdx.graphics.getHeight()-80);
-			gameFont.draw(spriteBatch, "velocity: "+(int)velocity, Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()-20);
+			gameFont.draw(spriteBatch, "velocity: "+(int)abstractVelocity, Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()-20);
 			if (level != -10)
 				gameFont.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-120);
-			if (velocity>23f)
+			if (abstractVelocity>23f)
 				gameFont.draw(spriteBatch, "You're falling too fast!", 20, Gdx.graphics.getHeight()-200);
-			if (velocity>30f)
+			if (abstractVelocity>30f)
 				gameDone = true;
 			//displaying the particle effects
+			if (abstractVelocity>24f){
+				charEffect.start();
+				charEffect.draw(spriteBatch, delta);
+//				charEffect.allowCompletion();
+			}
 			for (ParticleEffect newEffect : effects){
+//				newEffect.start();
 				newEffect.draw(spriteBatch, delta);
-				newEffect.allowCompletion();
+//				newEffect.allowCompletion();
 			}
 			spriteBatch.end();
 		}
@@ -208,15 +263,7 @@ public class WorldRenderer {
 			dispose();
 		}
 		
-		//cleaning the particle effects array list of finished effects
-		for (int i=0;i<effects.size();i++){
-			if (effects.get(i).isComplete()){
-				effects.remove(i);
-				i--;
-				System.out.println("effect REMOVED");
-			}
-			
-		}
+		
 	}
 	
 	private void drawSanta(){
@@ -257,6 +304,10 @@ public class WorldRenderer {
 				gift.gifts.get(k).height 
 				);
 		}
+	}
+	
+	private void animateGift(Rectangle giftToAnimate){
+		
 	}
 	
 	private void shakeBackground(float speed){

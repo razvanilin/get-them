@@ -1,17 +1,17 @@
-mist
+Untitled
 - Delay -
 active: false
 - Duration - 
-lowMin: 200.0
-lowMax: 200.0
+lowMin: 50.0
+lowMax: 50.0
 - Count - 
-min: 0
-max: 500
+min: 100
+max: 2000
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 100.0
-highMax: 100.0
+highMin: 252.0
+highMax: 252.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -20,8 +20,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 300.0
-highMax: 1000.0
+highMin: 500.0
+highMax: 500.0
 relative: false
 scalingCount: 3
 scaling0: 1.0
@@ -46,7 +46,7 @@ highMin: 0.0
 highMax: 0.0
 relative: false
 scalingCount: 1
-scaling0: 1.0
+scaling0: 0.0
 timelineCount: 1
 timeline0: 0.0
 - Spawn Height - 
@@ -56,25 +56,25 @@ highMin: 0.0
 highMax: 0.0
 relative: false
 scalingCount: 1
-scaling0: 1.0
+scaling0: 0.0
 timelineCount: 1
 timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 32.0
-highMax: 32.0
+highMin: 30.0
+highMax: 30.0
 relative: false
 scalingCount: 1
-scaling0: 1.0
+scaling0: 0.627451
 timelineCount: 1
 timeline0: 0.0
 - Velocity - 
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 200.0
-highMax: 80.0
+highMin: 30.0
+highMax: 500.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -82,19 +82,19 @@ timelineCount: 1
 timeline0: 0.0
 - Angle - 
 active: true
-lowMin: 90.0
-lowMax: 90.0
-highMin: 45.0
-highMax: 135.0
+lowMin: 0.0
+lowMax: 0.0
+highMin: 360.0
+highMax: 0.0
 relative: false
 scalingCount: 3
 scaling0: 1.0
-scaling1: 0.09803922
-scaling2: 0.0
+scaling1: 1.0
+scaling2: 0.43137255
 timelineCount: 3
 timeline0: 0.0
-timeline1: 0.49315068
-timeline2: 0.9794521
+timeline1: 0.63013697
+timeline2: 0.98630136
 - Rotation - 
 active: false
 - Wind - 
@@ -103,9 +103,9 @@ active: false
 active: false
 - Tint - 
 colorsCount: 3
-colors0: 0.6117647
-colors1: 0.6901961
-colors2: 0.6862745
+colors0: 0.6156863
+colors1: 0.0
+colors2: 0.0
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -115,14 +115,14 @@ highMin: 1.0
 highMax: 1.0
 relative: false
 scalingCount: 4
-scaling0: 0.0
-scaling1: 0.75438595
-scaling2: 0.75
+scaling0: 1.0
+scaling1: 1.0
+scaling2: 0.7719298
 scaling3: 0.0
 timelineCount: 4
 timeline0: 0.0
-timeline1: 0.20547946
-timeline2: 0.8
+timeline1: 0.1780822
+timeline2: 0.7808219
 timeline3: 1.0
 - Options - 
 attached: false
