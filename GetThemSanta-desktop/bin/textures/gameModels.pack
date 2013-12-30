@@ -5,50 +5,22 @@ filter: Nearest,Nearest
 repeat: none
 cloud
   rotate: false
-  xy: 1, 573
+  xy: 1, 1
   size: 896, 448
   orig: 896, 448
   offset: 0, 0
   index: -1
 Santa
   rotate: false
-  xy: 1, 261
+  xy: 899, 139
   size: 290, 310
   orig: 290, 310
   offset: 0, 0
   index: -1
 gift0
   rotate: false
-  xy: 1, 16
+  xy: 1191, 206
   size: 190, 243
   orig: 190, 243
-  offset: 0, 0
-  index: -1
-gift1
-  rotate: false
-  xy: 899, 868
-  size: 120, 153
-  orig: 120, 153
-  offset: 0, 0
-  index: -1
-gift2
-  rotate: false
-  xy: 293, 469
-  size: 80, 102
-  orig: 80, 102
-  offset: 0, 0
-  index: -1
-gift3
-  rotate: false
-  xy: 193, 208
-  size: 40, 51
-  orig: 40, 51
-  offset: 0, 0
-  index: -1
-gift4
-  rotate: false
-  xy: 1, 1
-  size: 10, 13
-  orig: 10, 13
   offset: 0, 0
   index: -1

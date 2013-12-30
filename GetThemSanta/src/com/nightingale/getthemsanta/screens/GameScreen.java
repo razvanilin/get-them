@@ -21,12 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nightingale.getthemsanta.controllers.SantaController;
 import com.nightingale.getthemsanta.models.World;
+import com.nightingale.getthemsanta.view.BackgroundRenderer;
 import com.nightingale.getthemsanta.view.WorldRenderer;
 
 public class GameScreen implements Screen, InputProcessor{
 
 	private World world;
 	private WorldRenderer renderer;
+	private BackgroundRenderer bckRenderer;
 	private SantaController controller;
 	private SpriteBatch spriteBatch;
 	private Stage stage;
@@ -69,6 +71,7 @@ public class GameScreen implements Screen, InputProcessor{
 				Gdx.input.setInputProcessor(this);
 				inputSet = false; //to set the input once
 			}
+//			bckRenderer.render(-1);
 			renderer.render(delta);
 			controller.update(renderer.velocity);
 		}
@@ -98,6 +101,7 @@ public class GameScreen implements Screen, InputProcessor{
 		spriteBatch = new SpriteBatch();
 		
 		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		bckRenderer = new BackgroundRenderer();
 		
 		gameState = GameState.PLAY;
 

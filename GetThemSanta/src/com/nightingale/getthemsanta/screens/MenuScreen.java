@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nightingale.getthemsanta.tween.ActorAccesor;
+import com.nightingale.getthemsanta.view.BackgroundRenderer;
 
 public class MenuScreen implements Screen{
 
@@ -31,6 +32,7 @@ public class MenuScreen implements Screen{
 	
 	private TextureRegion backgroundTexture;
 	private SpriteBatch spriteBatch;
+	private BackgroundRenderer bckRenderer;
 
 	private Stage stage;
 	private TextureAtlas atlas;
@@ -45,7 +47,7 @@ public class MenuScreen implements Screen{
 	
 	public MenuScreen(Game game){
 		this.game = game;
-
+		bckRenderer = new BackgroundRenderer();
 	}
 	
 	@Override
@@ -59,6 +61,7 @@ public class MenuScreen implements Screen{
 		
 		stage.act(delta);
 		spriteBatch.begin();
+//		bckRenderer.render(-1);
 		spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		spriteBatch.end();
 		stage.draw();

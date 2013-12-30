@@ -109,7 +109,7 @@ public class WorldRenderer {
 		charEffect.start();
 	}
 	
-	//render fields
+//	render fields
 	public float velocity=6f;
 	float abstractVelocity = 6f;
 	float x;
@@ -121,11 +121,10 @@ public class WorldRenderer {
 	int score = 0;
 	int scoreMultiplier = 1;
 	Rectangle hit;
-	boolean animate = false;
 	float timeTillLastCloudHit=0f;
 	
 	public void render(float delta){
-		//hit = null;
+//		hit = null;
 		if (level != -10){
 			level -=Gdx.graphics.getDeltaTime();
 			//			System.out.println(level);
@@ -145,14 +144,15 @@ public class WorldRenderer {
 		}
 		else if (velocity>=15f && velocity<=23){
 			velocity += Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
-			abstractVelocity += Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+			if (abstractVelocity <=23)
+				abstractVelocity += Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
 		}
-		else {
+		else if (abstractVelocity > 23){
 //			velocity += .5f*Gdx.graphics.getDeltaTime()+(1/2*velocity);
-			abstractVelocity += .5f*Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
+			abstractVelocity += .75f*Gdx.graphics.getDeltaTime()+(1/2*abstractVelocity);
 		}
 		
-		//System.out.println(velocity);
+//		System.out.println(velocity);
 
 		timePassedCloud += Gdx.graphics.getDeltaTime();
 		timePassedGift += Gdx.graphics.getDeltaTime();
@@ -170,10 +170,10 @@ public class WorldRenderer {
 		charEffect.setPosition(santa.getPosition().x+(santa.getBounds().width/2), santa.getPosition().y);
 		
 		/* --- Collision detection --- */
-		//clouds
+//		clouds
 		for (int k =0; k< cloud.clouds.size();k++){
 			if (santa.getBounds().overlaps(cloud.clouds.get(k))/*&& hitCount<1*/){
-				//System.out.println(hitCount);
+//				System.out.println(hitCount);
 				if (velocity > 6){
 					velocity -= 4*Gdx.graphics.getDeltaTime();
 					abstractVelocity -= 4*Gdx.graphics.getDeltaTime();
@@ -202,7 +202,6 @@ public class WorldRenderer {
 				k--;
 				score+=scoreMultiplier;
 				scoreMultiplier+=20;
-				animate = true;
 			}
 		}
 
@@ -239,6 +238,8 @@ public class WorldRenderer {
 			gameFont.draw(spriteBatch, "Score: "+score, 20, Gdx.graphics.getHeight()-20);
 			gameFont.draw(spriteBatch, "+"+scoreMultiplier, 20, Gdx.graphics.getHeight()-80);
 			gameFont.draw(spriteBatch, "velocity: "+(int)abstractVelocity, Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()-20);
+//			gameFont.draw(spriteBatch, "velocity: "+(int)velocity, Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()-100);
+
 			if (level != -10)
 				gameFont.draw(spriteBatch, ""+(int)level, 20, Gdx.graphics.getHeight()-120);
 			if (abstractVelocity>23f)
@@ -306,10 +307,6 @@ public class WorldRenderer {
 		}
 	}
 	
-	private void animateGift(Rectangle giftToAnimate){
-		
-	}
-	
 	private void shakeBackground(float speed){
 //		Min + (int)(Math.random() * ((Max - Min) + 1))
 		spriteBatch.draw(
@@ -325,6 +322,9 @@ public class WorldRenderer {
 		System.out.println("Sprite Batch disposed");
 		spriteBatch.dispose();
 		gameFont.dispose();
+		cloudEffect.dispose();
+		giftEffect.dispose();
+		charEffect.dispose();
 	}
 	
 	public int getScore(){
