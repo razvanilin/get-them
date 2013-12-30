@@ -49,18 +49,22 @@ public class SantaController {
 		keys.get(keys.put(Keys.RIGHT, false));
 	}
 	
-	public void update(float delta){
-		processInput();
+	public void update(float velocity){
+		processInput(velocity);
 	}
 
-	float accelX;
-	private void processInput() {
+	private void processInput(float velocity) {
+//		System.out.println(Gdx.input.getAccelerometerX());
 		
 		//Android controller using the accelerometer
 		if (Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
 				if (santa.getPosition().x >= 0 && santa.getPosition().x <=Gdx.graphics.getWidth()-(santa.getSize()*renderer.ppuX)-20){
-					santa.setPosition(new Vector2(santa.getPosition().x - Gdx.input.getAccelerometerX(), santa.getPosition().y));
+					if (Gdx.input.getAccelerometerX()<0)
+						santa.setPosition(new Vector2(santa.getPosition().x - (Gdx.input.getAccelerometerX() - (velocity/25)), santa.getPosition().y));
+					else if (Gdx.input.getAccelerometerX()>0)
+						santa.setPosition(new Vector2(santa.getPosition().x - (Gdx.input.getAccelerometerX() + (velocity/25)), santa.getPosition().y));
 				}
+				//resets the char position so it does not get stuck outside of the screen
 				else if (santa.getPosition().x<=santa.getSize()*renderer.ppuX)
 					santa.setPosition(new Vector2(santa.getPosition().x + 1 , santa.getPosition().y));
 				else if (santa.getPosition().x>=Gdx.graphics.getWidth()-(santa.getSize()*renderer.ppuX)-20)

@@ -21,12 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nightingale.getthemsanta.controllers.SantaController;
 import com.nightingale.getthemsanta.models.World;
+import com.nightingale.getthemsanta.view.BackgroundRenderer;
 import com.nightingale.getthemsanta.view.WorldRenderer;
 
 public class GameScreen implements Screen, InputProcessor{
 
 	private World world;
 	private WorldRenderer renderer;
+	private BackgroundRenderer bckRenderer;
 	private SantaController controller;
 	private SpriteBatch spriteBatch;
 	private Stage stage;
@@ -36,14 +38,15 @@ public class GameScreen implements Screen, InputProcessor{
 	private TextButton buttonResume, buttonMenu;
 	private Label heading;
 	private TweenManager tweenManager;
+	private TextureRegion backgroundTexture;
 	
 	private Game game;
-	
-	private TextureRegion backgroundTexture;
 	
 	public float level;
 	
 	private int width, height;
+	
+	private boolean inputSet = true;
 	
 	private enum GameState {
 		PLAY, PAUSE
@@ -63,14 +66,14 @@ public class GameScreen implements Screen, InputProcessor{
 		//Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		spriteBatch.begin();
-		spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-		spriteBatch.end();
-		
 		if (gameState == GameState.PLAY){
-			Gdx.input.setInputProcessor(this);
-			renderer.render();
-			controller.update(delta);
+			if (inputSet){
+				Gdx.input.setInputProcessor(this);
+				inputSet = false; //to set the input once
+			}
+//			bckRenderer.render(-1);
+			renderer.render(delta);
+			controller.update(renderer.velocity);
 		}
 		else{
 			stage.act(delta);
@@ -97,10 +100,11 @@ public class GameScreen implements Screen, InputProcessor{
 		controller = new SantaController(world, game);
 		spriteBatch = new SpriteBatch();
 		
+		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		bckRenderer = new BackgroundRenderer();
+		
 		gameState = GameState.PLAY;
 
-		backgroundTexture = new TextureRegion(new Texture(Gdx.files.internal("background/sky.png")),0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
 		Gdx.input.setInputProcessor(this);
 	}
 	
@@ -118,7 +122,6 @@ public class GameScreen implements Screen, InputProcessor{
 		
 		//create heading
 		heading = new Label("Game Paused", skin);
-		
 		//create buttons
 		buttonResume = new TextButton("Resume", skin);
 		buttonResume.pad(20);
@@ -126,6 +129,7 @@ public class GameScreen implements Screen, InputProcessor{
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				gameState = GameState.PLAY;
+				inputSet = true;
 				dispose();
 			}
 		});
