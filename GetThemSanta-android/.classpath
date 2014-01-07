@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/GetThemSanta"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/GetThemAlt"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="lib" path="/GetThemSanta/libs/gdx.jar" sourcepath="/GetThemSanta/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="D:/devStuff/tween-engine-api.jar"/>
 	<classpathentry kind="lib" path="D:/devStuff/tween-engine-api-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/GetThemAlt/libs/gdx.jar" sourcepath="/GetThemAlt/libs/gdx-sources.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

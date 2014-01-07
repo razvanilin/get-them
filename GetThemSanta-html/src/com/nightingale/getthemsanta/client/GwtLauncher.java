@@ -1,6 +1,6 @@
 package com.nightingale.getthemsanta.client;
 
-import com.nightingale.getthemsanta.SantaMain;
+import com.nightingale.getthemalt.SantaMain;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
