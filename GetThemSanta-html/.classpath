@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/GetThemSanta"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/GetThemAlt"/>
 	<classpathentry exported="true" kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="/GetThemSanta/libs/gdx.jar" sourcepath="/GetThemSanta/libs/gdx-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/GetThemSanta/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt.jar" sourcepath="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/GetThemAlt/libs/gdx-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/GetThemAlt/libs/gdx.jar" sourcepath="/GetThemAlt/libs/gdx-sources.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
